@@ -1,0 +1,44 @@
+# Ignorer tous les fichiers exécutables
+*.exe
+
+# Ignorer les fichiers temporaires qui pourraient être générés
+temp.*
+*.tmp
+*.temp
+
+# Ignorer les fichiers de logs
+*.log
+log/
+logs/
+
+# Ignorer les fichiers de sauvegarde d'éditeurs
+*~
+*.bak
+*.swp
+*.swo
+
+# Ignorer les fichiers spécifiques à Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Ignorer les fichiers spécifiques à d'autres IDE
+.idea/
+*.sublime-*
+
+# Ignorer les répertoires Docker temporaires
+.docker/
+
+# Fichiers spécifiques à COBOL 
+# (décommenter si nécessaire selon votre environnement)
+# *.cob.bak
+# *.lis
+# *.lst
+# *.dmp
+
+# Ignorer les fichiers de configuration personnels
+*.env
+*.local
+
+# Ignorer les dossiers de dépendances ou de build
+build/
+out/
