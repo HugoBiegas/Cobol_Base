@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide complet d'initiation au COBOL</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cobol.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Guide complet d'initiation au COBOL</h1>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                </label>
+                <em>Mode sombre</em>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <nav class="toc" id="toc">
+            <h2>Sommaire</h2>
+            <ul id="toc-list">
+                <!-- Généré par JavaScript -->
+            </ul>
+        </nav>
+
+        <main class="content">
+            <section id="introduction" class="section">
+                <h2>1. Introduction au COBOL</h2>
+                
+                <h3>Historique et importance</h3>
+                <ul>
+                    <li>COBOL (Common Business-Oriented Language) a été créé en 1959</li>
+                    <li>Conçu par Grace Hopper et le comité CODASYL</li>
+                    <li>Objectif principal : standardiser la programmation d'entreprise</li>
+                    <li>Reste aujourd'hui essentiel dans les systèmes financiers, bancaires et administratifs</li>
+                    <li>Selon les estimations, 70-80% des transactions commerciales mondiales s'exécutent sur des systèmes COBOL</li>
+                </ul>
+                
+                <h3>Caractéristiques principales</h3>
+                <ul>
+                    <li>Langage verbeux, proche de l'anglais naturel</li>
+                    <li>Auto-documenté et facile à lire</li>
+                    <li>Hautement stable et compatible avec les versions antérieures</li>
+                    <li>Excellente précision pour les calculs financiers</li>
+                    <li>Structure formelle et rigoureuse</li>
+                </ul>
+            </section>
+
+            <section id="structure" class="section">
+                <h2>2. Structure d'un programme COBOL</h2>
+                
+                <p>Un programme COBOL se compose de quatre divisions principales :</p>
+                
+                <pre><code class="language-cobol">IDENTIFICATION DIVISION.
+ENVIRONMENT DIVISION.
+DATA DIVISION.
+PROCEDURE DIVISION.</code></pre>
+                
+                <h3>Règles de base</h3>
+                <ul>
+                    <li>Les lignes de code COBOL sont traditionnellement divisées en 80 colonnes</li>
+                    <li>Colonnes 1-6 : réservées pour les numéros de ligne (optionnels)</li>
+                    <li>Colonne 7 : indicateur spécial (* pour commentaires, - pour continuation)</li>
+                    <li>Colonnes 8-72 : code du programme</li>
+                    <li>Tout mot-clé doit être suivi d'un espace et d'un point pour terminer une instruction</li>
+                </ul>
+            </section>
+
+            <section id="divisions" class="section">
+                <h2>3. Les divisions du COBOL en détail</h2>
+                
+                <h3>IDENTIFICATION DIVISION</h3>
+                <p>Identifie le programme et fournit des informations générales.</p>
+                
+                <pre><code class="language-cobol">IDENTIFICATION DIVISION.
+   PROGRAM-ID. MONPROGRAMME.
+   AUTHOR. VOTRE-NOM.
+   DATE-WRITTEN. 05/03/2025.
+   DATE-COMPILED. 05/03/2025.</code></pre>
+                
+                <h3>ENVIRONMENT DIVISION</h3>
+                <p>Spécifie l'environnement d'exécution du programme.</p>
+                
+                <pre><code class="language-cobol">ENVIRONMENT DIVISION.
+   CONFIGURATION SECTION.
+      SOURCE-COMPUTER. PC.
+      OBJECT-COMPUTER. PC.
+   
+   INPUT-OUTPUT SECTION.
+      FILE-CONTROL.
+         SELECT FICHIER-CLIENT ASSIGN TO "clients.dat"
+         ORGANIZATION IS SEQUENTIAL.</code></pre>
+                
+                <h3>DATA DIVISION</h3>
+                <p>Définit toutes les données utilisées par le programme.</p>
+                
+                <pre><code class="language-cobol">DATA DIVISION.
+   FILE SECTION.
+   FD FICHIER-CLIENT
+      RECORD CONTAINS 80 CHARACTERS.
+   01 ENREGISTREMENT-CLIENT.
+      05 CLIENT-ID       PIC 9(5).
+      05 CLIENT-NOM      PIC X(20).
+      05 CLIENT-PRENOM   PIC X(15).
+      05 CLIENT-SOLDE    PIC 9(7)V99.
+      05 FILLER          PIC X(31).
+   
+   WORKING-STORAGE SECTION.
+   01 WS-VARIABLES.
+      05 WS-TOTAL        PIC 9(9)V99 VALUE ZEROS.
+      05 WS-COMPTEUR     PIC 9(3) VALUE ZERO.
+      05 WS-FIN-FICHIER  PIC X(1) VALUE 'N'.
+         88 FIN-FICHIER  VALUE 'Y'.</code></pre>
+                
+                <h3>PROCEDURE DIVISION</h3>
+                <p>Contient toutes les instructions exécutables du programme.</p>
+                
+                <pre><code class="language-cobol">PROCEDURE DIVISION.
+   MAIN-PROCEDURE.
+      PERFORM INITIALISATION
+      PERFORM TRAITEMENT UNTIL FIN-FICHIER
+      PERFORM FINALISATION
+      STOP RUN.
+   
+   INITIALISATION.
+      OPEN INPUT FICHIER-CLIENT
+      READ FICHIER-CLIENT
+         AT END MOVE 'Y' TO WS-FIN-FICHIER
+      END-READ.
+   
+   TRAITEMENT.
+      ADD CLIENT-SOLDE TO WS-TOTAL
+      ADD 1 TO WS-COMPTEUR
+      READ FICHIER-CLIENT
+         AT END MOVE 'Y' TO WS-FIN-FICHIER
+      END-READ.
+   
+   FINALISATION.
+      DISPLAY "Nombre de clients: " WS-COMPTEUR
+      DISPLAY "Total des soldes: " WS-TOTAL
+      CLOSE FICHIER-CLIENT.</code></pre>
+            </section>
+
+            <section id="datatypes" class="section">
+                <h2>4. Types de données et variables</h2>
+                
+                <h3>Définition des données avec PIC (Picture Clause)</h3>
+                
+                <p>Le mot clé PIC définit le format d'une donnée :</p>
+                
+                <ul>
+                    <li><strong>9</strong> : Caractère numérique</li>
+                    <li><strong>X</strong> : Tout caractère alphanumerique</li>
+                    <li><strong>A</strong> : Caractère alphabétique uniquement</li>
+                    <li><strong>V</strong> : Position décimale implicite (pas de stockage physique)</li>
+                    <li><strong>S</strong> : Signe (positif/négatif)</li>
+                </ul>
+                
+                <p>Exemples :</p>
+                <pre><code class="language-cobol">05 MONTANT      PIC 9(5)V99.    * 5 chiffres entiers, 2 décimales
+05 NOM          PIC X(20).      * 20 caractères alphanumériques
+05 CODE         PIC A(3).       * 3 caractères alphabétiques
+05 SOLDE        PIC S9(7)V99.   * Nombre signé avec 7 chiffres et 2 décimales</code></pre>
+                
+                <h3>Niveaux de données</h3>
+                
+                <p>Les niveaux définissent la hiérarchie des données :</p>
+                <ul>
+                    <li><strong>01</strong> : Niveau principal</li>
+                    <li><strong>05</strong>, <strong>10</strong>, <strong>15</strong>... : Sous-niveaux</li>
+                    <li><strong>66</strong> : Élément de renommage (RENAMES)</li>
+                    <li><strong>77</strong> : Élément indépendant</li>
+                    <li><strong>88</strong> : Condition (valeurs spécifiques)</li>
+                </ul>
+                
+                <p>Exemple :</p>
+                <pre><code class="language-cobol">01 PERSONNE.
+   05 IDENTITE.
+      10 NOM      PIC X(20).
+      10 PRENOM   PIC X(15).
+   05 COORDONNEES.
+      10 ADRESSE  PIC X(30).
+      10 VILLE    PIC X(20).
+   05 STATUT      PIC X.
+      88 ACTIF    VALUE 'A'.
+      88 INACTIF  VALUE 'I'.</code></pre>
+            </section>
+
+            <section id="operations" class="section">
+                <h2>5. Opérations et expressions</h2>
+                
+                <h3>Opérateurs arithmétiques</h3>
+                <ul>
+                    <li>ADD : Addition</li>
+                    <li>SUBTRACT : Soustraction</li>
+                    <li>MULTIPLY : Multiplication</li>
+                    <li>DIVIDE : Division</li>
+                    <li>COMPUTE : Expressions complexes</li>
+                </ul>
+                
+                <p>Exemples :</p>
+                <pre><code class="language-cobol">ADD VALEUR1 TO VALEUR2
+SUBTRACT COUT FROM PRIX GIVING MARGE
+MULTIPLY QUANTITE BY PRIX GIVING TOTAL
+DIVIDE TOTAL BY NOMBRE GIVING MOYENNE
+COMPUTE RESULTAT = (VALEUR1 + VALEUR2) * TAUX / 100</code></pre>
+                
+                <h3>Opérateurs de comparaison</h3>
+                <ul>
+                    <li>EQUAL TO (ou =)</li>
+                    <li>GREATER THAN (ou >)</li>
+                    <li>LESS THAN (ou <)</li>
+                    <li>GREATER THAN OR EQUAL TO (ou >=)</li>
+                    <li>LESS THAN OR EQUAL TO (ou <=)</li>
+                    <li>NOT EQUAL TO (ou <>)</li>
+                </ul>
+            </section>
+
+            <section id="controlstructures" class="section">
+                <h2>6. Structures de contrôle</h2>
+                
+                <h3>Conditions IF...ELSE</h3>
+                <pre><code class="language-cobol">IF AGE > 18
+   DISPLAY "Majeur"
+ELSE
+   DISPLAY "Mineur"
+END-IF.
+
+IF STATUT = 'A'
+   DISPLAY "Actif"
+ELSE IF STATUT = 'S'
+   DISPLAY "Suspendu"
+ELSE
+   DISPLAY "Inactif"
+END-IF.</code></pre>
+                
+                <h3>Boucle PERFORM</h3>
+                <pre><code class="language-cobol">* Boucle simple
+PERFORM TRAITEMENT-LIGNE 10 TIMES.
+
+* Boucle conditionnelle
+PERFORM TRAITEMENT-DONNEES UNTIL FIN-FICHIER.
+
+* Boucle avec compteur
+PERFORM VARYING COMPTEUR FROM 1 BY 1 UNTIL COMPTEUR > 100
+   DISPLAY COMPTEUR
+END-PERFORM.</code></pre>
+                
+                <h3>EVALUATE (équivalent du CASE/SWITCH)</h3>
+                <pre><code class="language-cobol">EVALUATE CODE-STATUT
+   WHEN 1
+      DISPLAY "En cours"
+   WHEN 2
+      DISPLAY "Terminé"
+   WHEN 3
+      DISPLAY "Erreur"
+   WHEN OTHER
+      DISPLAY "Statut inconnu"
+END-EVALUATE.</code></pre>
+            </section>
+
+            <section id="filemanagement" class="section">
+                <h2>7. Manipulation de fichiers</h2>
+                
+                <h3>Types de fichiers</h3>
+                <ul>
+                    <li>Séquentiel : Lecture/écriture dans l'ordre</li>
+                    <li>Indexé : Accès direct via une clé</li>
+                    <li>Relatif : Accès par numéro d'enregistrement</li>
+                </ul>
+                
+                <h3>Opérations de base</h3>
+                <pre><code class="language-cobol">* Ouverture de fichier
+OPEN INPUT FICHIER-ENTREE
+OPEN OUTPUT FICHIER-SORTIE
+OPEN I-O FICHIER-MAJABLE
+
+* Lecture
+READ FICHIER-ENTREE
+   AT END SET FIN-FICHIER TO TRUE
+END-READ.
+
+* Écriture
+WRITE ENREGISTREMENT-SORTIE
+   INVALID KEY DISPLAY "Erreur d'écriture"
+END-WRITE.
+
+* Mise à jour
+REWRITE ENREGISTREMENT
+   INVALID KEY DISPLAY "Enregistrement introuvable"
+END-REWRITE.
+
+* Suppression
+DELETE FICHIER-CLIENT
+   INVALID KEY DISPLAY "Suppression impossible"
+END-DELETE.
+
+* Fermeture
+CLOSE FICHIER-ENTREE
+CLOSE FICHIER-SORTIE.</code></pre>
+            </section>
+
+            <section id="subprograms" class="section">
+                <h2>8. Sous-programmes et modularité</h2>
+                
+                <h3>Sections et paragraphes</h3>
+                <pre><code class="language-cobol">PROCEDURE DIVISION.
+   MAIN-SECTION.
+      PERFORM INITIALISATION
+      PERFORM TRAITEMENT
+      PERFORM FINALISATION
+      STOP RUN.
+   
+   INITIALISATION.
+      OPEN INPUT FICHIER-ENTREE.
+      OPEN OUTPUT FICHIER-SORTIE.
+   
+   TRAITEMENT.
+      PERFORM UNTIL FIN-FICHIER
+         READ FICHIER-ENTREE
+            AT END SET FIN-FICHIER TO TRUE
+            NOT AT END PERFORM TRAITER-LIGNE
+         END-READ
+      END-PERFORM.
+   
+   TRAITER-LIGNE.
+      * Traitement spécifique
+      WRITE ENREGISTREMENT-SORTIE.
+   
+   FINALISATION.
+      CLOSE FICHIER-ENTREE
+      CLOSE FICHIER-SORTIE.</code></pre>
+                
+                <h3>Appel à des programmes externes</h3>
+                <pre><code class="language-cobol">CALL "SOUS-PROGRAMME" USING PARAMETRE1, PARAMETRE2.</code></pre>
+            </section>
+
+            <section id="completeexample" class="section">
+                <h2>9. Exemple complet : Programme de gestion de clients</h2>
+                
+                <button class="copy-btn" id="copyCompleteExample">Copier l'exemple</button>
+                
+                <pre><code class="language-cobol">IDENTIFICATION DIVISION.
+   PROGRAM-ID. GESTION-CLIENTS.
+   AUTHOR. VOTRE-NOM.
+
+ENVIRONMENT DIVISION.
+   INPUT-OUTPUT SECTION.
+      FILE-CONTROL.
+         SELECT FICHIER-CLIENTS ASSIGN TO "CLIENTS.DAT"
+         ORGANIZATION IS INDEXED
+         ACCESS MODE IS DYNAMIC
+         RECORD KEY IS CLIENT-ID.
+
+DATA DIVISION.
+   FILE SECTION.
+   FD FICHIER-CLIENTS.
+   01 ENREGISTREMENT-CLIENT.
+      05 CLIENT-ID       PIC 9(5).
+      05 CLIENT-NOM      PIC X(20).
+      05 CLIENT-PRENOM   PIC X(15).
+      05 CLIENT-ADRESSE  PIC X(30).
+      05 CLIENT-VILLE    PIC X(20).
+      05 CLIENT-CP       PIC X(5).
+      05 CLIENT-SOLDE    PIC S9(7)V99.
+      
+   WORKING-STORAGE SECTION.
+   01 WS-VARIABLES.
+      05 WS-CHOIX        PIC 9.
+      05 WS-FIN          PIC X VALUE 'N'.
+         88 FIN-PROGRAMME  VALUE 'O'.
+      05 WS-EXIST        PIC X.
+         88 CLIENT-EXISTE  VALUE 'O'.
+      05 WS-ID-RECH      PIC 9(5).
+
+PROCEDURE DIVISION.
+   MAIN-PROCEDURE.
+      PERFORM INITIALISATION
+      PERFORM MENU-PRINCIPAL UNTIL FIN-PROGRAMME
+      PERFORM FINALISATION
+      STOP RUN.
+   
+   INITIALISATION.
+      OPEN I-O FICHIER-CLIENTS.
+   
+   MENU-PRINCIPAL.
+      DISPLAY "===== GESTION DES CLIENTS ====="
+      DISPLAY "1. Ajouter un client"
+      DISPLAY "2. Modifier un client"
+      DISPLAY "3. Supprimer un client"
+      DISPLAY "4. Consulter un client"
+      DISPLAY "5. Quitter"
+      DISPLAY "Votre choix: " WITH NO ADVANCING
+      ACCEPT WS-CHOIX
+      
+      EVALUATE WS-CHOIX
+         WHEN 1
+            PERFORM AJOUTER-CLIENT
+         WHEN 2
+            PERFORM MODIFIER-CLIENT
+         WHEN 3
+            PERFORM SUPPRIMER-CLIENT
+         WHEN 4
+            PERFORM CONSULTER-CLIENT
+         WHEN 5
+            MOVE 'O' TO WS-FIN
+         WHEN OTHER
+            DISPLAY "Choix invalide!"
+      END-EVALUATE.
+   
+   AJOUTER-CLIENT.
+      DISPLAY "ID du client: " WITH NO ADVANCING
+      ACCEPT CLIENT-ID
+      
+      MOVE 'N' TO WS-EXIST
+      READ FICHIER-CLIENTS
+         INVALID KEY MOVE 'N' TO WS-EXIST
+         NOT INVALID KEY MOVE 'O' TO WS-EXIST
+      END-READ
+      
+      IF CLIENT-EXISTE
+         DISPLAY "Ce client existe déjà!"
+      ELSE
+         DISPLAY "Nom: " WITH NO ADVANCING
+         ACCEPT CLIENT-NOM
+         DISPLAY "Prénom: " WITH NO ADVANCING
+         ACCEPT CLIENT-PRENOM
+         DISPLAY "Adresse: " WITH NO ADVANCING
+         ACCEPT CLIENT-ADRESSE
+         DISPLAY "Ville: " WITH NO ADVANCING
+         ACCEPT CLIENT-VILLE
+         DISPLAY "Code postal: " WITH NO ADVANCING
+         ACCEPT CLIENT-CP
+         DISPLAY "Solde: " WITH NO ADVANCING
+         ACCEPT CLIENT-SOLDE
+         
+         WRITE ENREGISTREMENT-CLIENT
+            INVALID KEY DISPLAY "Erreur d'écriture!"
+         END-WRITE
+      END-IF.
+   
+   MODIFIER-CLIENT.
+      DISPLAY "ID du client à modifier: " WITH NO ADVANCING
+      ACCEPT WS-ID-RECH
+      
+      MOVE WS-ID-RECH TO CLIENT-ID
+      MOVE 'N' TO WS-EXIST
+      READ FICHIER-CLIENTS
+         INVALID KEY MOVE 'N' TO WS-EXIST
+         NOT INVALID KEY MOVE 'O' TO WS-EXIST
+      END-READ
+      
+      IF NOT CLIENT-EXISTE
+         DISPLAY "Client non trouvé!"
+      ELSE
+         DISPLAY "Nom actuel: ", CLIENT-NOM
+         DISPLAY "Nouveau nom (Entrée pour conserver): " WITH NO ADVANCING
+         ACCEPT CLIENT-NOM
+         
+         * Répéter pour les autres champs...
+         
+         REWRITE ENREGISTREMENT-CLIENT
+            INVALID KEY DISPLAY "Erreur de mise à jour!"
+         END-REWRITE
+      END-IF.
+   
+   SUPPRIMER-CLIENT.
+      DISPLAY "ID du client à supprimer: " WITH NO ADVANCING
+      ACCEPT WS-ID-RECH
+      
+      MOVE WS-ID-RECH TO CLIENT-ID
+      DELETE FICHIER-CLIENTS
+         INVALID KEY DISPLAY "Client non trouvé!"
+         NOT INVALID KEY DISPLAY "Client supprimé!"
+      END-DELETE.
+   
+   CONSULTER-CLIENT.
+      DISPLAY "ID du client à consulter: " WITH NO ADVANCING
+      ACCEPT WS-ID-RECH
+      
+      MOVE WS-ID-RECH TO CLIENT-ID
+      READ FICHIER-CLIENTS
+         INVALID KEY DISPLAY "Client non trouvé!"
+         NOT INVALID KEY PERFORM AFFICHER-CLIENT
+      END-READ.
+   
+   AFFICHER-CLIENT.
+      DISPLAY "===== DÉTAILS DU CLIENT ====="
+      DISPLAY "ID     : ", CLIENT-ID
+      DISPLAY "Nom    : ", CLIENT-NOM
+      DISPLAY "Prénom : ", CLIENT-PRENOM
+      DISPLAY "Adresse: ", CLIENT-ADRESSE
+      DISPLAY "Ville  : ", CLIENT-VILLE
+      DISPLAY "CP     : ", CLIENT-CP
+      DISPLAY "Solde  : ", CLIENT-SOLDE.
+   
+   FINALISATION.
+      CLOSE FICHIER-CLIENTS.</code></pre>
+            </section>
+
+            <section id="tips" class="section">
+                <h2>10. Conseils pour bien démarrer avec COBOL</h2>
+                
+                <h3>Bonnes pratiques</h3>
+                <ol>
+                    <li><strong>Nommage clair</strong> - Utilisez des noms de variables descriptifs</li>
+                    <li><strong>Commentaires</strong> - Commentez généreusement votre code</li>
+                    <li><strong>Indentation</strong> - Maintenez une indentation cohérente</li>
+                    <li><strong>Modularité</strong> - Divisez votre programme en sections logiques</li>
+                    <li><strong>Test rigoureux</strong> - Testez systématiquement vos programmes</li>
+                </ol>
+                
+                <h3>Erreurs courantes à éviter</h3>
+                <ol>
+                    <li>Oublier les points après les instructions</li>
+                    <li>Mal aligner le code (colonnes importantes)</li>
+                    <li>Négliger la gestion des erreurs</li>
+                    <li>Utiliser des variables non initialisées</li>
+                    <li>Créer des boucles infinies</li>
+                </ol>
+            </section>
+
+            <section id="resources" class="section">
+                <h2>11. Ressources pour continuer l'apprentissage</h2>
+                
+                <h3>Compilateurs et environnements</h3>
+                <ul>
+                    <li>GnuCOBOL (OpenCOBOL) - compilateur gratuit et open source</li>
+                    <li>IBM Enterprise COBOL - environnement professionnel</li>
+                    <li>Micro Focus Visual COBOL - IDE moderne pour COBOL</li>
+                </ul>
+                
+                <h3>Livres recommandés</h3>
+                <ul>
+                    <li>"Beginning COBOL for Programmers" par Michael Coughlan</li>
+                    <li>"COBOL: From Micro to Mainframe" par Robert Grauer et al.</li>
+                    <li>"Murach's Structured COBOL" par Mike Murach et Anne Prince</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Guide d'initiation au COBOL - <span id="current-year"></span></p>
+        </div>
+    </footer>
+
+    <button id="back-to-top" title="Retour en haut">↑</button>
+    
+    <script src="script.js"></script>
+</body>
+</html>
